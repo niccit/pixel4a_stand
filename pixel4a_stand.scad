@@ -14,12 +14,11 @@ usb_slot_width=12;
 usb_slot_height=15;
 phone_rest_radius=20;
 
-show_base=0;
+show_base=1;
 show_top=1;
 cable_left=0;
 
 // Base of stand
-// Power run and slot to connect with USB
 if (show_base == 1) {
     difference() {
         stand_base();
@@ -48,6 +47,7 @@ if (show_base == 1) {
     }
 }
 
+// Top of stand
 if (show_top == 1) {
     translate([0, - 125, 0])
         difference() {
@@ -79,6 +79,7 @@ module stand_base() {
     }
 }
 
+// This creates the slot on the base into which the top snaps
 module hollow_ring(){
     difference(){
         cylinder(r=(base_diam / 2) - 1, h=base_height);
