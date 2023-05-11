@@ -1,4 +1,4 @@
-# Charging Stand for Google Pixel 4a
+# Charging Stand with Magnetic Adapter
 
 ## Introduction
 
@@ -22,20 +22,28 @@ The base holds the power run and the slot for the USB adapter.
 
 The top has the support for the phone and a slot that exposes the adapter.
 
-I used [this adapter](https://a.co/23xZH8S).
+- For version 1, I used [this adapter](https://a.co/23xZH8S).
+- For version 2, I used [this adapter](https://a.co/d/gbPng0D).
 
 ## Working with the Code
 
-The STL files are available in this repo and I plan on sharing it on Thingiverse and Cults. 
+The STL files are available in this repo.
+
+In version 2, I've moved the USB run up so it doesn't show on the bottom.
+
+To print a heavier base, I recommend 80% infill. You're welcome to reduce/raise that it all depends on how much
+filament you want to end up using.
+
+I used [Uglu](https://www.protapes.com/uglu-removable-adhesive-glue) to keep the USB adapter from moving around too
+much.
+
+Also in version 2, I've made the support for the phone rest thicker.
 
 If you want to work with the code I've used toggles for the following:
 
 * Show base
-* Show Top
-* Left side power
-
-The last toggle allows provides support for the power cable to come into the base from the left instead of the right
-side.
+* Show top
+* <Left/Right> side power
 
 ### If You Want to Contribute
 
