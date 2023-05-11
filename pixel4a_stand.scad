@@ -1,72 +1,43 @@
-# SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 
 $fa = 1;
 $fs = 0.4;
 
-base_height=15;
+// Parameters
+base_height=18.44;
 base_diam=100;
 top_height=3;
 top_diam=100;
-base_power_height=15;
-base_power_diam=base_diam / 4 ;
-base_powerRun_height=10;
-base_powerRun_diam=12;
-usb_slot_length=31;
-usb_slot_width=12;
-usb_slot_height=15;
 phone_rest_radius=20;
+usb_adapter_length = 21.72;
+usb_adapter_height = 16.44;
+usb_adapter_phone_connect_width = 9.44;
+usb_adapter_base_usb_width = 12;
+cable_run_diam = 12;
 
+// Options
 show_base=1;
 show_top=1;
-cable_left=0;
+cable_left=1;
 
-// Base of stand
+
 if (show_base == 1) {
-    difference() {
-        stand_base();
-        if (cable_left == 1) {
-            translate([5, 6, base_height - 4])
-                cube([usb_slot_length, usb_slot_width, usb_slot_height], center = true);
-            // Wide opening for cable
-            translate([30, 7, -2.5])
-                cylinder(r = (base_power_diam / 2), h = base_power_height);
-            // Cable run
-            rotate([180, 90, 0])
-                translate([-3, -7, -50])
-                    cylinder(r = (base_powerRun_diam / 2), h = base_powerRun_height);
-        }
-        else {
-            translate([-5, 6, base_height - 4])
-                cube([usb_slot_length, usb_slot_width, usb_slot_height], center = true);
-            // Wide opening for cable
-            translate([-30, 7, -2.5])
-                cylinder(r = (base_power_diam / 2), h = base_power_height);
-            // Cable run
-            rotate([0, 90, 0])
-                translate([-3, 7, -50])
-                    cylinder(r = (base_powerRun_diam / 2), h = base_powerRun_height);
-        }
+    stand_base();
+}
+
+if (show_top == 1) {
+    if (show_base == 1) {
+        translate([0, -125, 0])
+            stand_top();
+    }
+    else {
+        stand_top();
     }
 }
 
-// Top of stand
-if (show_top == 1) {
-    translate([0, - 125, 0])
-        difference() {
-            stand_top();
-            if (cable_left == 1)
-                translate([3.5, 5, top_height])
-                    cube([20, 9, 2], center = true);
-            else
-                translate([-3.5, 5, top_height])
-                    cube([20, 9, 2], center = true);
-        }
-    translate([0, - 136, phone_rest_radius + 11.95 - 0.001])
-        rotate([85, 0, 180])
-            phone_rest();
-}
 
-// Modules
+// -- Modules --
+//
 module phone_rest() {
     linear_extrude(height=5)
         scale([1, 1.5])
@@ -75,9 +46,61 @@ module phone_rest() {
 
 module stand_base() {
     difference(){
-        cylinder(r=base_diam / 2, h=base_height);
-        translate([0, 0, base_height - 1.5])
+        stand();
+        translate([0, 0, base_height - 3.5])
             hollow_ring();
+    }
+}
+
+module stand_top() {
+        if (cable_left == 1) {
+            difference() {
+                cylinder(r = (base_diam / 2) - 1, h = top_height);
+                cylinder(r = (base_diam / 2) - 1.75, h = top_height - 1);
+                // slot for usb adapter
+                translate([- 3, - 5, top_height])
+                    cube([usb_adapter_length, usb_adapter_phone_connect_width, usb_adapter_height], center = true);
+            }
+            translate([0, 10 , 32 - 0.001])
+                rotate([- 85, 0, 180])
+                    phone_rest();
+        }
+        else {
+            difference() {
+                cylinder(r = (base_diam / 2) - 1, h = top_height);
+                cylinder(r = (base_diam / 2) - 1.75, h = top_height - 1);
+                // slot for usb adapter
+                translate([3, - 5, top_height])
+                    cube([usb_adapter_length, usb_adapter_phone_connect_width, usb_adapter_height], center = true);
+            }
+            translate([0, 10 , 32 - 0.001])
+                rotate([- 85, 0, 180])
+                    phone_rest();
+        }
+}
+
+module stand() {
+    difference() {
+        cylinder(r=base_diam / 2, h=usb_adapter_height);
+        if (cable_left == 1) {
+            // slot for usb adapter
+            translate([-3, -5, base_height / 2 + 1])
+                cube([usb_adapter_length, usb_adapter_base_usb_width , usb_adapter_height ], center=true);
+            // opening for power cable
+            rotate([90, 90, 90])
+                translate([-usb_adapter_height / 2 - 0.5, -5, -base_diam / 2])
+                    cylinder(d=cable_run_diam, h=40);
+        }
+        else {
+            // slot for usb adapter
+            // translate([3, -5, usb_adapter_height - 6.25])
+            translate([3, -5, base_height / 2 + 1])
+                cube([usb_adapter_length, usb_adapter_base_usb_width, usb_adapter_height ], center=true);
+            // opening for power cable
+            rotate([90, 90, 90])
+                translate([-usb_adapter_height / 2 - 0.5, -5, base_diam / 2 - 39])
+                    cylinder(d=cable_run_diam, h=40);
+        }
     }
 }
 
@@ -89,9 +112,4 @@ module hollow_ring(){
     }
 }
 
-module stand_top(){
-    difference(){
-        cylinder(r=(base_diam / 2) - 1, h=top_height);
-        cylinder(r=(base_diam / 2) - 1.75, h=top_height - 1);
-    }
-}
+
