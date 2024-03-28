@@ -15,8 +15,11 @@ You can leave the tip in your phone if you don't need the port for anything else
 ## Parts Needed
 
 The base holds the power run and the slot for the USB adapter.
+
 The top has the support for the phone and a slot that exposes the adapter.
+
 Version 3 is a complete rework. The base and top are snap fit together using [this library](https://github.com/tbuser/pin_connector) from tbuser.
+
 The phone rest is more substantial and should not weaken over time and use.
 
 - For version 1, I used [this adapter](https://a.co/23xZH8S).
