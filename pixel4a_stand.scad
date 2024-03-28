@@ -3,113 +3,142 @@
 $fa = 1;
 $fs = 0.4;
 
+// pin library - pin_connectors by tbuser (https://github.com/tbuser/pin_connectors)
+use<lib/pins.scad>;
+use<lib/pin_joints.scad>;
+
 // Parameters
-base_height=18.44;
 base_diam=100;
-top_height=3;
-top_diam=100;
-phone_rest_radius=20;
-usb_adapter_length = 21.72;
-usb_adapter_height = 16.44;
-usb_adapter_phone_connect_width = 9.44;
-usb_adapter_base_usb_width = 12;
-cable_run_diam = 12;
 
-// Options
-show_base=1;
-show_top=1;
-cable_left=1;
-
-
-if (show_base == 1) {
-    stand_base();
-}
-
-if (show_top == 1) {
-    if (show_base == 1) {
-        translate([0, -125, 0])
-            stand_top();
-    }
-    else {
-        stand_top();
-    }
-}
-
-
-// -- Modules --
-//
-module phone_rest() {
-    linear_extrude(height=5)
-        scale([1, 1.5])
-            circle(r=phone_rest_radius);
-}
-
-module stand_base() {
-    difference(){
-        stand();
-        translate([0, 0, base_height - 3.5])
-            hollow_ring();
-    }
-}
-
-module stand_top() {
-        if (cable_left == 1) {
-            difference() {
-                cylinder(r = (base_diam / 2) - 1, h = top_height);
-                cylinder(r = (base_diam / 2) - 1.75, h = top_height - 1);
-                // slot for usb adapter
-                translate([- 3, - 5, top_height])
-                    cube([usb_adapter_length, usb_adapter_phone_connect_width, usb_adapter_height], center = true);
-            }
-            translate([0, 10 , 32 - 0.001])
-                rotate([- 85, 0, 180])
-                    phone_rest();
-        }
-        else {
-            difference() {
-                cylinder(r = (base_diam / 2) - 1, h = top_height);
-                cylinder(r = (base_diam / 2) - 1.75, h = top_height - 1);
-                // slot for usb adapter
-                translate([3, - 5, top_height])
-                    cube([usb_adapter_length, usb_adapter_phone_connect_width, usb_adapter_height], center = true);
-            }
-            translate([0, 10 , 32 - 0.001])
-                rotate([- 85, 0, 180])
-                    phone_rest();
-        }
-}
+// --- Modules ---
 
 module stand() {
-    difference() {
-        cylinder(r=base_diam / 2, h=usb_adapter_height);
-        if (cable_left == 1) {
-            // slot for usb adapter
-            translate([-3, -5, base_height / 2 + 1])
-                cube([usb_adapter_length, usb_adapter_base_usb_width , usb_adapter_height ], center=true);
-            // opening for power cable
-            rotate([90, 90, 90])
-                translate([-usb_adapter_height / 2 - 0.5, -5, -base_diam / 2])
-                    cylinder(d=cable_run_diam, h=40);
-        }
-        else {
-            // slot for usb adapter
-            // translate([3, -5, usb_adapter_height - 6.25])
-            translate([3, -5, base_height / 2 + 1])
-                cube([usb_adapter_length, usb_adapter_base_usb_width, usb_adapter_height ], center=true);
-            // opening for power cable
-            rotate([90, 90, 90])
-                translate([-usb_adapter_height / 2 - 0.5, -5, base_diam / 2 - 39])
-                    cylinder(d=cable_run_diam, h=40);
-        }
-    }
+	difference() {
+		cylinder(d=base_diam, h=6.5);
+		translate([3, 0.25, 8])
+			rotate([5, 0, 0])
+				charging_node();
+		// cable run
+		translate([40, 0, 6])
+		minkowski() {
+			cube([50, 2.29, 9], center=true);
+				cylinder(r=4, h=0.5);
+		}
+		// inset around cable management
+		translate([50, -5, 1])
+		minkowski() {
+			cube([1, 10.29, 6.5]);
+				cylinder(d=4, h=0.5);
+		}
+		translate([0, -30, 2])
+			pinhole(h=4.5, r=4, lh=3, lt=1, t=0.3, tight=false);
+		translate([0, 30, 2])
+			pinhole(h=4.5, r=4, lh=3, lt=1, t=0.3, tight=false);
+	}
+
+
 }
 
-// This creates the slot on the base into which the top snaps
-module hollow_ring(){
-    difference(){
-        cylinder(r=(base_diam / 2) - 1, h=base_height);
-        cylinder(r=(base_diam / 2) - 2, h=base_height + 1);
-    }
+module top() {
+	union() {
+		difference() {
+			cylinder(d=base_diam, h=11);
+			translate([0, 0.15, 4.5])
+			rotate([5, 0, 0])
+			minkowski() {
+				cube([7.25, 2.5, 13], center=true);
+					cylinder(r=4, h=0.5);
+			}
+			// cable run
+			translate([32, 0, 3.25])
+			minkowski() {
+				cube([50, 6.29, 7], center=true);
+					cylinder(d=4, h=0.5);
+			}
+			// inset around cable management
+			translate([50, -5, -1])
+			minkowski() {
+				cube([1, 10.29, 8.5]);
+					cylinder(d=4, h=0.5);
+			}
+			// Pinholes to join top to bottom
+			translate([0, -30, 0])
+				pinhole(h=4.5, r=4, lh=3, lt=1, t=0.3, tight=false);
+			translate([0, 30, 0])
+				pinhole(h=4.5, r=4, lh=3, lt=1, t=0.3, tight=false);
+		}
+
+		// phone rest
+		translate([0, -19, 50])
+		rotate([5, 0, 0])
+			phone_rest();
+
+
+	}
 }
+
+module charging_node() {
+	difference() {
+		$fn = 50;
+		rotate([5, 0, 0])
+		minkowski() {
+			cube([18.08, 6.29, 14.12], center=true);
+				cylinder(d=4, h=0.5);
+		}
+	}
+	
+}
+
+module pins() {
+	if (for_print == true) {
+		translate([-60, 0, 0])  //Disable translate for printing
+			pinpeg(h=8, r=4, lh=3, lt=1);
+	}
+	else {
+		translate ([0, -26, 0])
+			rotate([90, 0, 0])
+				pinpeg(h=8, r=4, lh=3, lt=1);
+		translate ([0, 34, 0])
+			rotate([90, 0, 0])
+				pinpeg(h=8, r=4, lh=3, lt=1);
+	}
+}
+
+
+module phone_rest() {
+	union() {
+		difference() {
+			minkowski() {
+				cube([50, 3, 90], center=true);
+					cylinder(r=6, h=0.6);
+			}
+		}
+	}
+}
+
+// --- Stand Assembly --- 
+
+// Options
+show_base=true;
+show_top=true;
+show_pins=true;
+for_print = false;  // set for_print to true for rendering just one pin to send to the 3D printer
+
+
+if (show_base == true) {
+	translate([0, 0, -6.5]) // to show as it will look assembled
+	// translate([0, 0, -12.5])  // to show pieces
+		stand();
+}
+
+if (show_top == true) {
+	top();
+}
+
+
+if (show_pins == true) {
+		pins();
+}
+
 
 

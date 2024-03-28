@@ -2,9 +2,7 @@
 
 ## Introduction
 
-While this charging stand was built specifically for the Google Pixel 4a, it really can be used with any phone. I tested
-it with my Google Pixel 7. The stand can support no case or a thin case. It wasn't designed to support anything heavy 
-duty like an Otterbox or similar.
+While this charging stand was built specifically for the Google Pixel 4a, it really can be used with any phone. 
 
 ![PIxel 4a Stand](images/stand_img.jpg "Stand")
 
@@ -23,27 +21,24 @@ The base holds the power run and the slot for the USB adapter.
 The top has the support for the phone and a slot that exposes the adapter.
 
 - For version 1, I used [this adapter](https://a.co/23xZH8S).
-- For version 2, I used [this adapter](https://a.co/d/gbPng0D).
+- For versions 2 and 3 I used [this adapter](https://a.co/d/gbPng0D).
 
 ## Working with the Code
 
 The STL files are available in this repo.
 
-In version 2, I've moved the USB run up so it doesn't show on the bottom.
+Version 3 is a complete rework. The base and top are snap fit together using [this library](https://github.com/tbuser/pin_connector) from tbuser.
 
-To print a heavier base, I recommend 80% infill. You're welcome to reduce/raise that it all depends on how much
+The phone rest is more substantial and should not weaken over time and use.
+
+To print a heavier base, I recommend 80-85% infill. You're welcome to reduce/raise that it all depends on how much
 filament you want to end up using.
-
-I used [Uglu](https://www.protapes.com/uglu-removable-adhesive-glue) to keep the USB adapter from moving around too
-much.
-
-Also in version 2, I've made the support for the phone rest thicker.
 
 If you want to work with the code I've used toggles for the following:
 
 * Show base
 * Show top
-* <Left/Right> side power
+* Show pins
 
 ### If You Want to Contribute
 
